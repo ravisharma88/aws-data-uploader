@@ -35,10 +35,9 @@ public class UploadImages {
                     .filter(path -> !path.getFileName().toString().contains(".DS_Store"))
                     .forEach(path ->{
                         String fileName = path.getFileName().toString();
-                        fileName = fileName.substring(0, fileName.indexOf("."));
-                        String objectName = s3Key.concat("/").concat(path.getFileName().toString());
+                        String objectName = s3Key.concat("/").concat(path.getParent().getFileName().toString()).concat("/").concat(fileName);
                         if(!amazonS3.doesObjectExist(s3BucketName, objectName)) {
-                            amazonS3.putObject(s3BucketName, s3Key.concat("/").concat(path.getFileName().toString()), path.toFile());
+                            amazonS3.putObject(s3BucketName, objectName, path.toFile());
                             System.out.println("Image uploaded ::" + fileName);
                         }else{
                             System.out.println("Image already exists ::" + fileName);
